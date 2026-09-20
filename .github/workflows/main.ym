@@ -35,13 +35,12 @@ jobs:
       run: ./gradlew assembleDebug --stacktrace
 
     - name: Upload APK
-      uses: actions/upload-artifact@v4
       if: success()
+      uses: actions/upload-artifact@v4
       with:
         name: VisionAgent-app
         path: app/build/outputs/apk/debug/*.apk
         if-no-files-found: error
-
 
 g.apk
 p
