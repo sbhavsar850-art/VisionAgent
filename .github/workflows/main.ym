@@ -22,22 +22,26 @@ jobs:
         cache: 'gradle'
 
     - name: Setup FFmpeg
+      env:
+        DEBIAN_FRONTEND: noninteractive
       run: |
-        sudo apt-get update || true
+        sudo apt-get update
         sudo apt-get install -y --no-install-recommends ffmpeg
 
-    - name: Make Gradlew Executable
-      run: chmod +x ./gradlew
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
 
-    - name: Build APK
-      run: ./gradlew assembleDebug --stacktrace --continue
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug --stacktrace
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
-      if: always()
+      if: success()
       with:
         name: VisionAgent-app
         path: app/build/outputs/apk/debug/*.apk
         if-no-files-found: error
-g.apk
 
+
+g.apk
+p
