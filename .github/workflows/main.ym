@@ -1,16 +1,27 @@
-      # ... अन्य चरण ...
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: .call:google:image_gen{end_turn:true,prompt:<ctrl46>A high-fidelity mockup of the same GitHub UI on a mobile phone as seen in image_0.png, but with key text and status elements updated to show success and corrected information. The status bar at the top remains similar (time 3:24, carrier info, etc.). The browser address bar still shows 'github.com/sbhavsa' (preserving the likely repo owner's handle), but the page content below is altered. The 'This workflow graph cannot' message is replaced by a fully rendered, complex GitHub Actions workflow graph, showing interconnected nodes and edges for jobs like 'build', 'test', 'docker-build', and 'deploy'. All jobs in the graph are marked with green checkmarks, and the connections are green. Below the graph, in the 'Annotations' section, the text '1 error' with the red error icon and the blue highlighting is entirely gone. Instead, this section is now 'Execution Summary' (or 'Jobs') and features a list of jobs, all with green success checkmarks: 'docker-build (Success, 4m 12s)', 'deploy (Success, 2m 55s)', and 'post-deployment (Success, 1m 2s)'. The file path referenced is now 'workflow file: .github/workflows/main.yml' without the '#L41' error indicator. Crucially, in the same position as the previous highlighted error message, a text field displays a clean, correct, and syntax-highlighted (e.g., in a dark-mode-like code block) YAML code snippet of the docker-build step (or the problematic step). The code shown is:
-```yaml
-      - name: docker-build
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: user/repo:latest
+name: Android CI
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew assembleDebug
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-debug.apk 
+        path: app/build/outputs/apk/debug/app-debug.apk
 
-g.apk
-p
